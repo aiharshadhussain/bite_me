@@ -1,0 +1,2590 @@
+/*
+ * Author       : aih.arshadhussain
+ * Generated on : 01-Mar-2026 15:23:46
+ * Version      : 1.0
+ */
+ application "Bite Me Stall Manager"
+ {
+ 	date format = "dd-MMM-yyyy"
+ 	time zone = "America/Los_Angeles"
+ 	time format = "24-hr"
+ 	forms
+	{
+		form inventory
+		{
+			displayname = "Inventory"
+			success message = "Inventory Added Successfully"
+			Section
+			(
+				type = section
+	 			row = 1
+	 			column = 0   
+				width = medium
+			)
+			item_id
+			(
+				type = list	
+				displayname = "Item ID"
+				values  = menu_items.ID
+    			displayformat = [item_id]
+				allow new entries
+				[
+					displayname = "Add New"
+				]
+				sortorder = ascending
+				height = 13px
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			reorder_level
+			(
+				type = number
+				displayname = "Reorder Level"
+				maxchar = 19
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			last_updated
+			(
+    			type = datetime
+				displayname = "Last Updated"
+				timedisplayoptions = "hh:mm:ss"
+				alloweddays = 0,1,2,3,4,5,6
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			low_stock_alert
+			(
+    			type = checkbox
+				displayname = "Low Stock Alert"
+				initial value = false
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+	
+			actions
+			{
+				on add
+				{
+					submit
+					(
+   						type = submit
+   						displayname = "Submit"
+					)
+					reset
+					(
+   						type = reset
+   						displayname = "Reset"
+					)
+				}
+				on edit
+				{
+					update
+					(
+   						type = submit
+   						displayname = "Update"
+					)
+					cancel
+					(
+   						type = cancel
+   						displayname = "Cancel"
+					)
+				}
+			}
+			blueprint components
+			{
+				stages = {"Inventory Record Created","Stock Level Checked","Low Stock Alert Triggered","Stock Level Normal","Restock Request Generated","Inventory Monitoring Active","Restock Request Approved","Restock Request Rejected","Purchase Order Created","Goods Received","Purchase Order On Hold","Purchase Order Cancelled","Inventory Updated","Quality Check Failed","Return to Supplier","Goods Received (Partial)","Low Stock Alert Reset"}
+			}
+		}
+		form menu_items
+		{
+			displayname = "Menu Items"
+			success message = "Menu Item Added Successfully"
+			Section
+			(
+				type = section
+	 			row = 1
+	 			column = 0   
+				width = medium
+			)
+			item_id
+			(
+    			type = autonumber
+				displayname = "Item ID"
+				start index = 1
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			item_name
+			(
+    			type = text
+				displayname = "Item Name"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			category
+			(
+				type = picklist
+				displayname = "Category"
+				values = {"Momo","Paniyaram","Mojito"}
+				others option = true
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			variant
+			(
+    			type = text
+				displayname = "Variant"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			price
+			(
+				displayname = "Price"
+				type = USD
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			is_active
+			(
+    			type = checkbox
+				displayname = "Is Active"
+				initial value = false
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+	
+			actions
+			{
+				on add
+				{
+					submit
+					(
+   						type = submit
+   						displayname = "Submit"
+					)
+					reset
+					(
+   						type = reset
+   						displayname = "Reset"
+					)
+				}
+				on edit
+				{
+					update
+					(
+   						type = submit
+   						displayname = "Update"
+					)
+					cancel
+					(
+   						type = cancel
+   						displayname = "Cancel"
+					)
+				}
+			}
+		}
+		form order_items
+		{
+			displayname = "Order Items"
+			success message = "Order Item Added Successfully"
+			Section
+			(
+				type = section
+	 			row = 1
+	 			column = 0   
+				width = medium
+			)
+			order
+			(
+				type = list	
+				displayname = "Order"
+				values  = orders.ID
+    			displayformat = [order_id]
+				allow new entries
+				[
+					displayname = "Add New"
+				]
+				sortorder = ascending
+				height = 13px
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			item_name
+			(
+    			type = text
+				displayname = "Item Name"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			quantity
+			(
+				type = number
+				displayname = "Quantity"
+				maxchar = 19
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			unit_price
+			(
+				displayname = "Unit Price"
+				type = USD
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			total_price
+			(
+				displayname = "Total Price"
+				type = USD
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+	
+			actions
+			{
+				on add
+				{
+					submit
+					(
+   						type = submit
+   						displayname = "Submit"
+					)
+					reset
+					(
+   						type = reset
+   						displayname = "Reset"
+					)
+				}
+				on edit
+				{
+					update
+					(
+   						type = submit
+   						displayname = "Update"
+					)
+					cancel
+					(
+   						type = cancel
+   						displayname = "Cancel"
+					)
+				}
+			}
+		}
+		form orders
+		{
+			displayname = "Orders"
+			success message = "Order Added Successfully"
+			Section
+			(
+				type = section
+	 			row = 1
+	 			column = 0   
+				width = medium
+			)
+			order_id
+			(
+    			type = autonumber
+				displayname = "Order ID"
+				start index = 1
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			customer_name
+			(
+    			type = text
+				displayname = "Customer Name"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			order_date
+			(
+    			type = date
+				displayname = "Order Date"
+				alloweddays = 0,1,2,3,4,5,6
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			total_amount
+			(
+				displayname = "Total Amount"
+				type = USD
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			discount_percentage
+			(
+    			type = percentage
+				displayname = "Discount Percentage"
+				maxchar = 16
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			final_amount
+			(
+				displayname = "Final Amount"
+				type = USD
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			payment_method
+			(
+				type = radiobuttons
+				displayname = "Payment Method"
+				values = {"Cash","UPi"}
+				others option = true
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			payment_status
+			(
+				type = radiobuttons
+				displayname = "Payment Status"
+				values = {"Paid","Pending"}
+				others option = true
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			order_status
+			(
+				type = picklist
+				displayname = "Order Status"
+				values = {"Ready","Delivered","Preparing"}
+				others option = true
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			created_by
+			(
+    			type = text
+				displayname = "Created By"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+	
+			actions
+			{
+				on add
+				{
+					submit
+					(
+   						type = submit
+   						displayname = "Submit"
+					)
+					reset
+					(
+   						type = reset
+   						displayname = "Reset"
+					)
+				}
+				on edit
+				{
+					update
+					(
+   						type = submit
+   						displayname = "Update"
+					)
+					cancel
+					(
+   						type = cancel
+   						displayname = "Cancel"
+					)
+				}
+			}
+			blueprint components
+			{
+				stages = {"Order Placed","Order Confirmed","Order Pending Payment","Order Cancelled","Order Processed","Order Shipped","Order On Hold","Order Delivered","Order Returned","Order Lost","Order Closed","Order Refunded","Order Replacement Shipped"}
+			}
+		}
+		form sales_dashboard
+		{
+			displayname = "Sales Dashboard"
+			success message = "Data Added Successfully!"
+			Section
+			(
+				type = section
+	 			row = 1
+	 			column = 0   
+				width = medium
+			)
+			date_1
+			(
+    			type = date
+				displayname = "Date"
+				alloweddays = 0,1,2,3,4,5,6
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			total_revenue
+			(
+				displayname = "Total Revenue"
+				type = USD
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			top_selling_item
+			(
+    			type = text
+				displayname = "Top Selling Item"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			cash_payment
+			(
+				displayname = "Cash Payment"
+				type = USD
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			upi_payment
+			(
+				displayname = "UPi Payment"
+				type = USD
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+	
+			actions
+			{
+				on add
+				{
+					submit
+					(
+   						type = submit
+   						displayname = "Submit"
+					)
+					reset
+					(
+   						type = reset
+   						displayname = "Reset"
+					)
+				}
+				on edit
+				{
+					update
+					(
+   						type = submit
+   						displayname = "Update"
+					)
+					cancel
+					(
+   						type = cancel
+   						displayname = "Cancel"
+					)
+				}
+			}
+		}
+		form user_roles
+		{
+			displayname = "User Roles"
+			success message = "User Role Added Successfully"
+			Section
+			(
+				type = section
+	 			row = 1
+	 			column = 0   
+				width = medium
+			)
+			username
+			(
+    			type = text
+				displayname = "Username"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			role
+			(
+				type = radiobuttons
+				displayname = "Role"
+				values = {"Staff","Admin"}
+				others option = true
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			access_level
+			(
+				type = radiobuttons
+				displayname = "Access Level"
+				values = {"View Only","Full"}
+				others option = true
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			last_login
+			(
+    			type = datetime
+				displayname = "Last Login"
+				timedisplayoptions = "hh:mm:ss"
+				alloweddays = 0,1,2,3,4,5,6
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+	
+			actions
+			{
+				on add
+				{
+					submit
+					(
+   						type = submit
+   						displayname = "Submit"
+					)
+					reset
+					(
+   						type = reset
+   						displayname = "Reset"
+					)
+				}
+				on edit
+				{
+					update
+					(
+   						type = submit
+   						displayname = "Update"
+					)
+					cancel
+					(
+   						type = cancel
+   						displayname = "Cancel"
+					)
+				}
+			}
+		}
+	}
+	reports
+	{
+		list order_items_Report
+		{
+			displayName = "All Order Items"
+			show all rows from order_items    
+			(
+				order as "Order"
+				item_name as "Item Name"
+				quantity as "Quantity"
+				unit_price as "Unit Price"
+				(
+					display = total,average,min,max	
+				)
+				total_price as "Total Price"
+				(
+					display = total,average,min,max	
+				)
+			)
+		}
+		list inventory_Report
+		{
+			displayName = "All Inventories"
+			show all rows from inventory    
+			(
+				item_id as "Item ID"
+				reorder_level as "Reorder Level"
+				last_updated as "Last Updated"
+				low_stock_alert as "Low Stock Alert"
+			)
+		}
+		list menu_items_Report
+		{
+			displayName = "All Menu Items"
+			show all rows from menu_items    
+			(
+				item_id as "Item ID"
+				item_name as "Item Name"
+				category as "Category"
+				variant as "Variant"
+				price as "Price"
+				(
+					display = total,average,min,max	
+				)
+				is_active as "Is Active"
+			)
+			conditional formatting
+			(
+				"New Formatting1"
+				{
+				condition = (category == "Mojito")
+				fields = [category]
+				format = "color:#ffffff;background-color:#765f89;"
+				}
+				"New Formatting2"
+				{
+				condition = (category == "Momo")
+				fields = [category]
+				format = "color:#000000;background-color:#1bbc9b;"
+				}
+				"New Formatting3"
+				{
+				condition = (category == "Paniyaram")
+				fields = [category]
+				format = "color:#ffffff;background-color:#e84c3d;"
+				}
+			)
+		}
+		kanban menu_items_by_category
+		{
+			displayName = "Categories"
+			show all rows from menu_items    
+			(
+				item_id as "Item ID"
+				item_name as "Item Name"
+				category as "Category"
+				variant as "Variant"
+				price as "Price"
+				(
+					display = total,average,min,max	
+				)
+				is_active as "Is Active"
+			)
+			options
+			(
+	 			display field = category
+	 		)
+		}
+		list orders_Report
+		{
+			displayName = "All Orders"
+			show all rows from orders    
+			(
+				order_id as "Order ID"
+				customer_name as "Customer Name"
+				order_date as "Order Date"
+				total_amount as "Total Amount"
+				(
+					display = total,average,min,max	
+				)
+				discount_percentage as "Discount Percentage"
+				(
+					display = total,average,min,max	
+				)
+				final_amount as "Final Amount"
+				(
+					display = total,average,min,max	
+				)
+				payment_method as "Payment Method"
+				payment_status as "Payment Status"
+				order_status as "Order Status"
+				created_by as "Created By"
+			)
+			conditional formatting
+			(
+				"New Formatting1"
+				{
+				condition = (order_status == "Delivered")
+				fields = [order_status]
+				format = "color:#ffffff;background-color:#765f89;"
+				}
+				"New Formatting2"
+				{
+				condition = (order_status == "Preparing")
+				fields = [order_status]
+				format = "color:#000000;background-color:#1bbc9b;"
+				}
+				"New Formatting3"
+				{
+				condition = (order_status == "Ready")
+				fields = [order_status]
+				format = "color:#ffffff;background-color:#e84c3d;"
+				}
+			)
+		}
+		kanban orders_by_order_status
+		{
+			displayName = "Order Statuses"
+			show all rows from orders    
+			(
+				order_id as "Order ID"
+				customer_name as "Customer Name"
+				order_date as "Order Date"
+				total_amount as "Total Amount"
+				(
+					display = total,average,min,max	
+				)
+				discount_percentage as "Discount Percentage"
+				(
+					display = total,average,min,max	
+				)
+				final_amount as "Final Amount"
+				(
+					display = total,average,min,max	
+				)
+				payment_method as "Payment Method"
+				payment_status as "Payment Status"
+				order_status as "Order Status"
+				created_by as "Created By"
+			)
+			options
+			(
+	 			display field = order_status
+	 		)
+		}
+		list sales_dashboard_Report
+		{
+			displayName = "Sales Dashboard Report"
+			show all rows from sales_dashboard    
+			(
+				date_1 as "Date"
+				total_revenue as "Total Revenue"
+				(
+					display = total,average,min,max	
+				)
+				top_selling_item as "Top Selling Item"
+				cash_payment as "Cash Payment"
+				(
+					display = total,average,min,max	
+				)
+				upi_payment as "UPi Payment"
+				(
+					display = total,average,min,max	
+				)
+			)
+		}
+		list user_roles_Report
+		{
+			displayName = "All User Roles"
+			show all rows from user_roles    
+			(
+				username as "Username"
+				role as "Role"
+				access_level as "Access Level"
+				last_login as "Last Login"
+			)
+		}
+	}
+	pages
+	{
+		page DashBoard
+		{
+			displayname = "Dashboard"
+			Content="<zml    \t\t\n\t\t\n\t\t\n\t\t\n\t\t\n>\n\t<layout>\n\t<row>\n\t<column\n   \t\t width='25%'\n   \t>\n\t<panel elementName='Panel 1'\n \n >\n\t<pr \n\t\t\twidth='fill'\n\t\theight='fill'\n>\n\t<pc \n\t\tpadding = '0px'\n\tbgColor = '#F97164'\n\n\t\twidth = '100%'\n\t\thAlign = 'left'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='fill'\n\t\theight='fill'\n>\n\t<pc \n\t\tpaddingTop = '20px'\n\tpaddingLeft = '20px'\n\tpaddingRight = '0px'\n\tpaddingBottom = '20px'\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\n\t\twidth = '64%'\n\t\thAlign = 'left'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\n>\n\t<pr \n\t>\n\t<pc \n\t\n>\n\t<text \n\n\tmarginLeft = '0px'\n\tmarginRight = '0px' \n\tmarginTop = '8px'\n\tcolor = '#FFFFFF'\n\tsize = '24px'\n\tbold = 'true' \n\ttype = 'Form Data'\n\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\n\n\tdisplayType = 'actual'\n\tdecimalPlaces = '2'\n\tthousandsSeperator = 'LOCALE'\n\tdecimalSeperator = 'DOT'\n\tnumberScale = 'none'\n\n\n\n\n\t  value = 'thisapp.order_items.unit_price.sum'\n>\n</text>\n\n</pc>\n</pr><pr \n\t>\n\t<pc \n\t\n>\n\t<text \n\n\tmarginLeft = '0px'\n\tmarginRight = '8px' \n\tmarginTop = '0px'\n\tcolor = '#FFFFFF'\n\tsize = '14px'\n\ttype = 'Text'\n\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\n\n\n\n\n\n\t  value = 'Total Unit Prices'\n>\n</text>\n\n</pc>\n</pr>\n</pc>\n</pr>\n</pc><pc \n\t\tpadding = '20px'\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\n\t\twidth = '36%'\n\t\thAlign = 'right'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\n>\n\t<image  \n\t\tmarginLeft = '10px'\n\tmarginRight = '0px' \n\tmarginBottom = '0px'\n\tmarginTop = '0px'\n\n\tcolor = '#FFFFFF'\n\tbgColor = '#C75A50'\n\twidth = '40px'\n\theight = '40px'\n\ttype = 'icon'\n\tvalue = 'shopping-tag'\n\tsize = '22px'\n\tcornerRadius = '10px'\n\ticonType = 'outline'\n/>\n</pc>\n</pr>\n</pc>\n</pr>\n</pc>\n</pr>\n</panel>\n</column><column\n   \t\t width='24%'\n   \t>\n\t<panel elementName='Panel 2'\n \n >\n\t<pr \n\t\t\twidth='fill'\n\t\theight='fill'\n>\n\t<pc \n\t\tpadding = '0px'\n\tbgColor = '#EEA131'\n\n\t\twidth = '100%'\n\t\thAlign = 'left'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='fill'\n\t\theight='fill'\n>\n\t<pc \n\t\tpaddingTop = '20px'\n\tpaddingLeft = '20px'\n\tpaddingRight = '0px'\n\tpaddingBottom = '20px'\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\n\t\twidth = '65%'\n\t\thAlign = 'left'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\tpadding = '5px'\n\n>\n\t<pr \n\t>\n\t<pc \n\t\n>\n\t<text \n\n\tcolor = '#FFFFFF'\n\tsize = '24px'\n\tbold = 'true' \n\ttype = 'Form Data'\n\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\n\n\tdisplayType = 'actual'\n\tdecimalPlaces = '2'\n\tthousandsSeperator = 'LOCALE'\n\tdecimalSeperator = 'DOT'\n\tnumberScale = 'none'\n\n\n\n\n\t  value = 'thisapp.order_items.total_price.sum'\n>\n</text>\n\n</pc>\n</pr><pr \n\t>\n\t<pc \n\t\n>\n\t<text \n\n\tcolor = '#FFFFFF'\n\tsize = '14px'\n\ttype = 'Text'\n\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\n\n\n\n\n\n\t  value = 'Total Total Prices'\n>\n</text>\n\n</pc>\n</pr>\n</pc>\n</pr>\n</pc><pc \n\t\tpadding = '20px'\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\n\t\twidth = '35%'\n\t\thAlign = 'right'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\n>\n\t<image  \n\t\tmarginLeft = '10px'\n\tmarginBottom = '0px'\n\tmarginTop = '0px'\n\n\tcolor = '#FFFFFF'\n\tbgColor = '#BE8127'\n\twidth = '40px'\n\theight = '40px'\n\ttype = 'icon'\n\tvalue = 'business-percentage-39'\n\tsize = '22px'\n\tcornerRadius = '10px'\n\ticonType = 'outline'\n/>\n</pc>\n</pr>\n</pc>\n</pr>\n</pc>\n</pr>\n</panel>\n</column><column\n   \t\t width='25%'\n   \t>\n\t<panel elementName='Panel 3'\n \n >\n\t<pr \n\t\t\twidth='fill'\n\t\theight='fill'\n>\n\t<pc \n\t\tpadding = '0px'\n\tbgColor = '#00CFA9'\n\n\t\twidth = '100%'\n\t\thAlign = 'left'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='fill'\n\t\theight='fill'\n>\n\t<pc \n\t\tpaddingTop = '20px'\n\tpaddingLeft = '20px'\n\tpaddingRight = '0px'\n\tpaddingBottom = '20px'\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\n\t\twidth = '65%'\n\t\thAlign = 'left'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\tpadding = '5px'\n\n>\n\t<pr \n\t>\n\t<pc \n\t\n>\n\t<text \n\n\tcolor = '#FFFFFF'\n\tsize = '24px'\n\tbold = 'true' \n\ttype = 'Form Data'\n\n\tbgColor = 'transparent'\n\n\n\tdisplayType = 'actual'\n\tdecimalPlaces = '2'\n\tthousandsSeperator = 'LOCALE'\n\tdecimalSeperator = 'DOT'\n\tnumberScale = 'none'\n\n\n\n\n\t  value = 'thisapp.menu_items.price.sum'\n>\n</text>\n\n</pc>\n</pr><pr \n\t>\n\t<pc \n\t\n>\n\t<text \n\n\tcolor = '#FFFFFF'\n\tsize = '14px'\n\ttype = 'Text'\n\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\n\n\n\n\n\n\t  value = 'Total Prices'\n>\n</text>\n\n</pc>\n</pr>\n</pc>\n</pr>\n</pc><pc \n\t\tpadding = '20px'\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\n\t\twidth = '35%'\n\t\thAlign = 'right'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\n>\n\t<image  \n\t\tmarginLeft = '10px'\n\tmarginBottom = '0px'\n\tmarginTop = '0px'\n\n\tcolor = '#FFFFFF'\n\tbgColor = '#0BA385'\n\twidth = '40px'\n\theight = '40px'\n\ttype = 'icon'\n\tvalue = 'shopping-tag'\n\tsize = '22px'\n\tcornerRadius = '10px'\n\ticonType = 'outline'\n/>\n</pc>\n</pr>\n</pc>\n</pr>\n</pc>\n</pr>\n</panel>\n</column><column\n   \t\t width='26%'\n   \t>\n\t<panel elementName='Panel 4'\n \n >\n\t<pr \n\t\t\twidth='fill'\n\t\theight='fill'\n>\n\t<pc \n\t\tpadding = '0px'\n\tbgColor = '#3E99DE'\n\n\t\twidth = '100%'\n\t\thAlign = 'left'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='fill'\n\t\theight='fill'\n>\n\t<pc \n\t\tpaddingTop = '20px'\n\tpaddingLeft = '20px'\n\tpaddingRight = '0px'\n\tpaddingBottom = '20px'\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\n\t\twidth = '65%'\n\t\thAlign = 'left'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\tpadding = '5px'\n\n>\n\t<pr \n\t>\n\t<pc \n\t\n>\n\t<text \n\n\tcolor = '#FFFFFF'\n\tsize = '24px'\n\tbold = 'true' \n\ttype = 'Form Data'\n\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\n\n\tdisplayType = 'actual'\n\tdecimalPlaces = '2'\n\tthousandsSeperator = 'LOCALE'\n\tdecimalSeperator = 'DOT'\n\tnumberScale = 'none'\n\n\n\n\n\t  value = 'thisapp.orders.final_amount.sum'\n>\n</text>\n\n</pc>\n</pr><pr \n\t>\n\t<pc \n\t\n>\n\t<text \n\n\tcolor = '#FFFFFF'\n\tsize = '14px'\n\ttype = 'Text'\n\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\n\n\n\n\n\n\t  value = 'Total Final Amounts'\n>\n</text>\n\n</pc>\n</pr>\n</pc>\n</pr>\n</pc><pc \n\t\tpadding = '20px'\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\n\t\twidth = '35%'\n\t\thAlign = 'right'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\n>\n\t<image  \n\t\tmarginLeft = '10px'\n\tmarginBottom = '0px'\n\tmarginTop = '0px'\n\n\tcolor = '#FFFFFF'\n\tbgColor = '#0E78C9'\n\twidth = '40px'\n\theight = '40px'\n\ttype = 'icon'\n\tvalue = 'shopping-tag-sale'\n\tsize = '22px'\n\tcornerRadius = '10px'\n\ticonType = 'outline'\n/>\n</pc>\n</pr>\n</pc>\n</pr>\n</pc>\n</pr>\n</panel>\n</column>\n</row><row>\n\t<column\n   \t\t width='100%'\n   \t>\n\t<panel elementName='Grouped_Panel 1'\n \n\t\n\ttitle = 'Categories'\n\t\n\t\ttitleSize = '15px'\n            boldTitle = 'true'\n >\n\t<pr \n\t\t\twidth='fill'\n\t\theight='fill'\n>\n\t<pc \n\t\tpadding = '0px'\n\tbgColor = '#FFFFFF'\n\n\t\twidth = '100%'\n\t\thAlign = 'left'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='fill'\n\t\theight='fill'\n>\n\t<pc \n\t\tpadding = '20px'\n\tbgColor = '#FFFFFF'\n\n\t\twidth = '25%'\n\t\thAlign = 'center'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\n>\n\t<image  \n\t\tmarginLeft = '0px'\n\tmarginBottom = '0px'\n\tmarginTop = '0px'\n\n\tcolor = '#FFFFFF'\n\tbgColor = '#F97164'\n\twidth = '40px'\n\theight = '40px'\n\ttype = 'icon'\n\tvalue = 'ui-2-grid-50'\n\tsize = '22px'\n\tcornerRadius = '20px'\n\ticonType = 'outline'\n/>\n</pc><pc \n\t\tpaddingLeft = '10px'\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\n\t\thAlign = 'left'\n>\n\t<pr \n\t>\n\t<pc \n\t\n>\n\t<text \n\n\tmarginLeft = '10px'\n\tmarginRight = '0px' \n\tmarginBottom = '0px'\n\tcolor = '#C75A50'\n\tsize = '28px'\n\tbold = 'true' \n\ttype = 'Form Data'\n\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\n\n\tdisplayType = 'actual'\n\tthousandsSeperator = 'LOCALE'\n\tdecimalSeperator = 'DOT'\n\tnumberScale = 'none'\n\n\n\n\n\t\tcriteria = 'category == &quot;Momo&quot;'\n\t  value = 'thisapp.menu_items.category.count'\n>\n</text>\n\n</pc>\n</pr><pr \n\t>\n\t<pc \n\t\n>\n\t<text \n\n\tmarginLeft = '10px'\n\tcolor = '#595959'\n\tsize = '14px'\n\ttype = 'Text'\n\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\n\n\n\n\n\n\t  value = 'Momo'\n>\n</text>\n\n</pc>\n</pr>\n</pc>\n</pr>\n</pc><pc \n\t\tpadding = '20px'\n\tbgColor = '#FFFFFF'\n\n\t\twidth = '25%'\n\t\thAlign = 'center'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\n>\n\t<image  \n\t\tmarginLeft = '0px'\n\tmarginBottom = '0px'\n\tmarginTop = '0px'\n\n\tcolor = '#FFFFFF'\n\tbgColor = '#EEA131'\n\twidth = '40px'\n\theight = '40px'\n\ttype = 'icon'\n\tvalue = 'ui-2-grid-50'\n\tsize = '22px'\n\tcornerRadius = '20px'\n\ticonType = 'outline'\n/>\n</pc><pc \n\t\tpaddingLeft = '10px'\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\n\t\thAlign = 'left'\n>\n\t<pr \n\t>\n\t<pc \n\t\n>\n\t<text \n\n\tmarginLeft = '10px'\n\tmarginRight = '0px' \n\tcolor = '#BE8127'\n\tsize = '28px'\n\tbold = 'true' \n\ttype = 'Form Data'\n\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\n\n\tdisplayType = 'actual'\n\tthousandsSeperator = 'LOCALE'\n\tdecimalSeperator = 'DOT'\n\tnumberScale = 'none'\n\n\n\n\n\t\tcriteria = 'category == &quot;Paniyaram&quot;'\n\t  value = 'thisapp.menu_items.category.count'\n>\n</text>\n\n</pc>\n</pr><pr \n\t>\n\t<pc \n\t\n>\n\t<text \n\n\tmarginLeft = '10px'\n\tmarginRight = '0px' \n\tmarginTop = '0px'\n\tcolor = '#595959'\n\tsize = '14px'\n\ttype = 'Text'\n\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\n\n\n\n\n\n\t  value = 'Paniyaram'\n>\n</text>\n\n</pc>\n</pr>\n</pc>\n</pr>\n</pc><pc \n\t\tpadding = '20px'\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\n\t\twidth = '25%'\n\t\thAlign = 'center'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\n>\n\t<image  \n\t\tmarginLeft = '0px'\n\tmarginBottom = '0px'\n\tmarginTop = '0px'\n\n\tcolor = '#FFFFFF'\n\tbgColor = '#00CFA9'\n\twidth = '40px'\n\theight = '40px'\n\ttype = 'icon'\n\tvalue = 'ui-2-grid-50'\n\tsize = '22px'\n\tcornerRadius = '20px'\n\ticonType = 'outline'\n/>\n</pc><pc \n\t\tpaddingLeft = '10px'\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\n\t\thAlign = 'left'\n>\n\t<pr \n\t>\n\t<pc \n\t\n>\n\t<text \n\n\tmarginLeft = '10px'\n\tmarginRight = '0px' \n\tcolor = '#0BA385'\n\tsize = '28px'\n\tbold = 'true' \n\ttype = 'Form Data'\n\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\n\n\tdisplayType = 'actual'\n\tthousandsSeperator = 'LOCALE'\n\tdecimalSeperator = 'DOT'\n\tnumberScale = 'none'\n\n\n\n\n\t\tcriteria = 'category == &quot;Mojito&quot;'\n\t  value = 'thisapp.menu_items.category.count'\n>\n</text>\n\n</pc>\n</pr><pr \n\t>\n\t<pc \n\t\n>\n\t<text \n\n\tmarginLeft = '10px'\n\tmarginRight = '0px' \n\tmarginTop = '0px'\n\tcolor = '#595959'\n\tsize = '14px'\n\ttype = 'Text'\n\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\n\n\n\n\n\n\t  value = 'Mojito'\n>\n</text>\n\n</pc>\n</pr>\n</pc>\n</pr>\n</pc><pc \n\t\tpadding = '20px'\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\n\t\twidth = '25%'\n\t\thAlign = 'center'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\n>\n\t<image  \n\t\tmarginLeft = '0px'\n\tmarginBottom = '0px'\n\tmarginTop = '0px'\n\n\tcolor = '#FFFFFF'\n\tbgColor = '#3E99DE'\n\twidth = '40px'\n\theight = '40px'\n\ttype = 'icon'\n\tvalue = 'design-2-selection'\n\tsize = '22px'\n\tcornerRadius = '20px'\n\ticonType = 'outline'\n/>\n</pc><pc \n\t\tpaddingLeft = '10px'\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\n\t\thAlign = 'left'\n>\n\t<pr \n\t>\n\t<pc \n\t\n>\n\t<text \n\n\tmarginLeft = '10px'\n\tmarginRight = '0px' \n\tcolor = '#0E78C9'\n\tsize = '28px'\n\tbold = 'true' \n\ttype = 'Form Data'\n\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\n\n\tdisplayType = 'actual'\n\tthousandsSeperator = 'LOCALE'\n\tdecimalSeperator = 'DOT'\n\tnumberScale = 'none'\n\n\n\n\n\t  value = 'thisapp.menu_items.category.count'\n>\n</text>\n\n</pc>\n</pr><pr \n\t>\n\t<pc \n\t\n>\n\t<text \n\n\tmarginLeft = '10px'\n\tmarginRight = '0px' \n\tmarginTop = '0px'\n\tcolor = '#595959'\n\tsize = '14px'\n\ttype = 'Text'\n\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\n\n\n\n\n\n\t  value = 'Total'\n>\n</text>\n\n</pc>\n</pr>\n</pc>\n</pr>\n</pc>\n</pr>\n</pc>\n</pr>\n</panel>\n</column>\n</row><row>\n\t<column\n   \t\t width='24%'\n   \t>\n\t<panel elementName='Panel_Button 1'\n \n\t\n\ttitle = 'Quick Links'\n\t\n\t\ttitleSize = '15px'\n            boldTitle = 'true'\n >\n\t<pr \n\t\t\twidth='fill'\n\t\theight='fill'\n>\n\t<pc \n\t\tbgColor = '#CB6711'\n\n\t\twidth = '2%'\n\t\thAlign = 'left'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\n>\n\t\n</pc>\n</pr>\n</pc><pc \n\t\tpaddingTop = '10px'\n\tpaddingLeft = '0px'\n\tpaddingRight = '0px'\n\tpaddingBottom = '10px'\n\tbgColor = '#FFFFFF'\n\n    action = 'OpenForm'\n\t\tcomponentLinkName = 'order_items'\n\t\ttarget = 'new-window'\n\t\twidth = '98%'\n\t\thAlign = 'center'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\n>\n\t<image  \n\t\tmarginLeft = '0px'\n\tmarginRight = '6px' \n\n\tcolor = '#3F3F3F'\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\twidth = '40px'\n\theight = '40px'\n\ttype = 'icon'\n\tvalue = 'ui-2-square-add-08'\n\tsize = '14px'\n\tcornerRadius = '20px'\n\ticonType = 'outline'\n/>\n</pc><pc \n\t\n>\n\t<text \n\n\tcolor = '#595959'\n\tsize = '14px'\n\ttype = 'Text'\n\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\n\n\n\n\n\n\t  value = 'Add New Order Items'\n>\n</text>\n\n</pc>\n</pr>\n</pc>\n</pr>\n</panel>\n</column><column\n   \t\t width='27%'\n   \t>\n\t<panel elementName='Panel_Button 2'\n \n >\n\t<pr \n\t\t\twidth='fill'\n\t\theight='fill'\n>\n\t<pc \n\t\tbgColor = '#CB6711'\n\n\t\twidth = '2%'\n\t\thAlign = 'left'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\n>\n\t\n</pc>\n</pr>\n</pc><pc \n\t\tpaddingTop = '10px'\n\tpaddingLeft = '0px'\n\tpaddingRight = '0px'\n\tpaddingBottom = '10px'\n\tbgColor = '#FFFFFF'\n\n    action = 'OpenForm'\n\t\tcomponentLinkName = 'inventory'\n\t\ttarget = 'new-window'\n\t\twidth = '98%'\n\t\thAlign = 'center'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\n>\n\t<image  \n\t\tmarginLeft = '0px'\n\tmarginRight = '6px' \n\n\tcolor = '#3F3F3F'\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\twidth = '40px'\n\theight = '40px'\n\ttype = 'icon'\n\tvalue = 'ui-2-square-add-08'\n\tsize = '14px'\n\tcornerRadius = '20px'\n\ticonType = 'outline'\n/>\n</pc><pc \n\t\n>\n\t<text \n\n\tcolor = '#3F3F3F'\n\tsize = '14px'\n\ttype = 'Text'\n\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\n\n\n\n\n\n\t  value = 'Add New Inventory'\n>\n</text>\n\n</pc>\n</pr>\n</pc>\n</pr>\n</panel>\n</column><column\n   \t\t width='25%'\n   \t>\n\t<panel elementName='Panel_Button 3'\n \n >\n\t<pr \n\t\t\twidth='fill'\n\t\theight='fill'\n>\n\t<pc \n\t\tbgColor = '#CB6711'\n\n\t\twidth = '2%'\n\t\thAlign = 'left'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\n>\n\t\n</pc>\n</pr>\n</pc><pc \n\t\tpaddingTop = '10px'\n\tpaddingLeft = '0px'\n\tpaddingRight = '0px'\n\tpaddingBottom = '10px'\n\tbgColor = '#FFFFFF'\n\n    action = 'OpenForm'\n\t\tcomponentLinkName = 'menu_items'\n\t\ttarget = 'new-window'\n\t\twidth = '98%'\n\t\thAlign = 'center'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\n>\n\t<image  \n\t\tmarginLeft = '0px'\n\tmarginRight = '6px' \n\n\tcolor = '#3F3F3F'\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\twidth = '40px'\n\theight = '40px'\n\ttype = 'icon'\n\tvalue = 'ui-2-square-add-08'\n\tsize = '14px'\n\tcornerRadius = '20px'\n\ticonType = 'outline'\n/>\n</pc><pc \n\t\n>\n\t<text \n\n\tcolor = '#3F3F3F'\n\tsize = '14px'\n\ttype = 'Text'\n\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\n\n\n\n\n\n\t  value = 'Add New Menu Items'\n>\n</text>\n\n</pc>\n</pr>\n</pc>\n</pr>\n</panel>\n</column><column\n   \t\t width='24%'\n   \t>\n\t<panel elementName='Panel_Button 4'\n \n >\n\t<pr \n\t\t\twidth='fill'\n\t\theight='fill'\n>\n\t<pc \n\t\tbgColor = '#CB6711'\n\n\t\twidth = '2%'\n\t\thAlign = 'left'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\n>\n\t\n</pc>\n</pr>\n</pc><pc \n\t\tpaddingTop = '10px'\n\tpaddingLeft = '0px'\n\tpaddingRight = '0px'\n\tpaddingBottom = '10px'\n\tbgColor = '#FFFFFF'\n\n    action = 'OpenForm'\n\t\tcomponentLinkName = 'orders'\n\t\ttarget = 'new-window'\n\t\twidth = '98%'\n\t\thAlign = 'center'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\n>\n\t<image  \n\t\tmarginLeft = '0px'\n\tmarginRight = '6px' \n\n\tcolor = '#3F3F3F'\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\twidth = '40px'\n\theight = '40px'\n\ttype = 'icon'\n\tvalue = 'ui-2-square-add-08'\n\tsize = '14px'\n\tcornerRadius = '20px'\n\ticonType = 'outline'\n/>\n</pc><pc \n\t\n>\n\t<text \n\n\tcolor = '#3F3F3F'\n\tsize = '14px'\n\ttype = 'Text'\n\n\tbgColor = 'rgba(0, 0, 0, 0)'\n\n\n\n\n\n\n\t  value = 'Add New Orders'\n>\n</text>\n\n</pc>\n</pr>\n</pc>\n</pr>\n</panel>\n</column>\n</row><row>\n\t<column\n   \t\t width='50%'\n   \t>\n\t<chart \n\telementName='Chart 1'\n\n\t\n\ttitle = 'Total Amount by Final Amount'\n\t\n\t\ttitleSize = '16px'\n\ttype = 'Scatter'\n\txtitle = 'Total Amount'\n\tytitle = 'Final Amount'\n\tbgColor = 'rgb(255, 255, 255)'\n\ttheme = '#f37d16'\n\tlegendPos = 'none'\n\theightType = 'auto'\n\theightValue = '300px'\n\tappLinkName = 'thisapp'\n\tformLinkName = 'orders'\n\txfield = 'total_amount'\n\tyfields = 'value:final_amount'\n\t\tDelugeCriteria = 'total_amount is not null'\n/>\n\n</column><column\n   \t\t width='50%'\n   \t>\n\t<chart \n\telementName='Chart 2'\n\n\t\n\ttitle = 'Total Price by Quantity'\n\t\n\t\ttitleSize = '16px'\n\ttype = 'Scatter'\n\txtitle = 'Total Price'\n\tytitle = 'Quantity'\n\tbgColor = 'rgb(255, 255, 255)'\n\ttheme = 'theme1'\n\tlegendPos = 'none'\n\theightType = 'auto'\n\theightValue = '300px'\n\tappLinkName = 'thisapp'\n\tformLinkName = 'order_items'\n\txfield = 'total_price'\n\tyfields = 'value:quantity'\n\t\tDelugeCriteria = 'total_price is not null'\n/>\n\n</column>\n</row><row>\n\t<column\n   \t\t width='100%'\n   \t>\n\t<report \n\telementName='Report'\n\n\t\tappLinkName = 'thisapp'\n\t\tlinkName = 'order_items_Report'\n\t\n\t\tiszreport = 'false'\n\t\t\t\t\tzc_AddRec = 'false'\n\t\t\t\t\tzc_EditRec = 'false'\n\t\t\t\t\tzc_Print = 'false'\n\t\t\t\t\tzc_Export = 'false'\n\t\t\t\t\tzc_DelRec = 'false'\n\t\t\t\t\tzc_DuplRec = 'false'\n\t\t\t\t\tzc_Search = 'false'\n\t\t\t\t\tzc_EditBulkRec = 'false'\n\t\t\t\t\tzc_BulkDelete = 'false'\n\t\t\t\t\tzc_BulkDuplicate = 'false'\n\theightType = 'auto'\n\theightValue = '700'\n\n/>\n</column>\n</row>\n</layout>\n</zml>"
+		}
+	}
+
+
+		workflow
+		{
+
+
+
+
+		blueprint
+		{
+    			inventory_restocking_alert as "Inventory Restocking Alert"
+    			{
+        			type = Blueprint
+        			form = inventory
+        			start
+        			{
+            			start stage = "Inventory Record Created"
+        			}
+        			stages
+        			{
+           			"Inventory Record Created"
+           			{
+           			}
+           			"Stock Level Checked"
+           			{
+           			}
+           			"Low Stock Alert Triggered"
+           			{
+           			}
+           			"Stock Level Normal"
+           			{
+           			}
+           			"Restock Request Generated"
+           			{
+           			}
+           			"Inventory Monitoring Active"
+           			{
+           			}
+           			"Restock Request Approved"
+           			{
+           			}
+           			"Restock Request Rejected"
+           			{
+           			}
+           			"Purchase Order Created"
+           			{
+           			}
+           			"Goods Received"
+           			{
+           			}
+           			"Purchase Order On Hold"
+           			{
+           			}
+           			"Purchase Order Cancelled"
+           			{
+           			}
+           			"Inventory Updated"
+           			{
+           			}
+           			"Quality Check Failed"
+           			{
+           			}
+           			"Return to Supplier"
+           			{
+           			}
+           			"Goods Received (Partial)"
+           			{
+           			}
+           			"Low Stock Alert Reset"
+           			{
+           			}
+        			}
+        			transitions
+        			{
+    				accept_partial_shipment as "Accept Partial Shipment"
+    				{
+         				type = normal
+         				from stage = "Quality Check Failed"
+         				to stage = "Goods Received (Partial)"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				approve_restock_request as "Approve Restock Request"
+    				{
+         				type = normal
+         				from stage = "Restock Request Generated"
+         				to stage = "Restock Request Approved"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				cancel_purchase_order as "Cancel Purchase Order"
+    				{
+         				type = normal
+         				from stage = "Purchase Order On Hold"
+         				to stage = "Purchase Order Cancelled"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				check_low_stock as "Check if Current Stock is Below Reorder Level"
+    				{
+         				type = normal
+         				from stage = "Stock Level Checked"
+         				to stage = "Low Stock Alert Triggered"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				check_stock_level as "Check Current Stock Against Reorder Level"
+    				{
+         				type = normal
+         				from stage = "Inventory Monitoring Active"
+         				to stage = "Stock Level Checked"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				confirm_goods_received as "Confirm Receipt of Restocked Items"
+    				{
+         				type = normal
+         				from stage = "Purchase Order Created"
+         				to stage = "Goods Received"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				confirm_normal_stock as "Confirm Stock is Above Reorder Level"
+    				{
+         				type = normal
+         				from stage = "Stock Level Checked"
+         				to stage = "Stock Level Normal"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				continue_monitoring as "Continue Monitoring Stock Levels"
+    				{
+         				type = normal
+         				from stage = "Stock Level Normal"
+         				to stage = "Inventory Monitoring Active"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				create_purchase_order as "Generate Purchase Order for Restock"
+    				{
+         				type = normal
+         				from stage = "Restock Request Approved"
+         				to stage = "Purchase Order Created"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				generate_restock_request as "Create Restock Request Based on Reorder Level"
+    				{
+         				type = normal
+         				from stage = "Low Stock Alert Triggered"
+         				to stage = "Restock Request Generated"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				hold_purchase_order as "Place Purchase Order on Hold"
+    				{
+         				type = normal
+         				from stage = "Purchase Order Created"
+         				to stage = "Purchase Order On Hold"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				initiate_quality_check as "Initiate Quality Inspection"
+    				{
+         				type = normal
+         				from stage = "Goods Received"
+         				to stage = "Quality Check Failed"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				reject_restock_request as "Reject Restock Request"
+    				{
+         				type = normal
+         				from stage = "Restock Request Generated"
+         				to stage = "Restock Request Rejected"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				reset_low_stock_alert as "Reset Low Stock Alert to False"
+    				{
+         				type = normal
+         				from stage = "Inventory Updated"
+         				to stage = "Low Stock Alert Reset"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				resume_monitoring as "Resume Normal Monitoring"
+    				{
+         				type = normal
+         				from stage = "Restock Request Rejected"
+         				to stage = "Inventory Monitoring Active"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				resume_purchase_order as "Resume Purchase Order Processing"
+    				{
+         				type = normal
+         				from stage = "Purchase Order On Hold"
+         				to stage = "Purchase Order Created"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				return_to_supplier as "Initiate Return Process for Defective Goods"
+    				{
+         				type = normal
+         				from stage = "Quality Check Failed"
+         				to stage = "Return to Supplier"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				update_inventory as "Update Stock Quantity in System"
+    				{
+         				type = normal
+         				from stage = "Goods Received"
+         				to stage = "Inventory Updated"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				update_inventory_partial as "Update Stock with Received Quantity"
+    				{
+         				type = normal
+         				from stage = "Goods Received (Partial)"
+         				to stage = "Inventory Updated"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				validate_inventory_entry as "Validate Inventory Entry"
+    				{
+         				type = normal
+         				from stage = "Inventory Record Created"
+         				to stage = "Stock Level Checked"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+        			}
+    			}
+    			order_processing_workflow as "Order Processing Workflow"
+    			{
+        			type = Blueprint
+        			form = orders
+        			start
+        			{
+            			start stage = "Order Placed"
+        			}
+        			stages
+        			{
+           			"Order Placed"
+           			{
+           			}
+           			"Order Confirmed"
+           			{
+           			}
+           			"Order Pending Payment"
+           			{
+           			}
+           			"Order Cancelled"
+           			{
+           			}
+           			"Order Processed"
+           			{
+           			}
+           			"Order Shipped"
+           			{
+           			}
+           			"Order On Hold"
+           			{
+           			}
+           			"Order Delivered"
+           			{
+           			}
+           			"Order Returned"
+           			{
+           			}
+           			"Order Lost"
+           			{
+           			}
+           			"Order Closed"
+           			{
+           			}
+           			"Order Refunded"
+           			{
+           			}
+           			"Order Replacement Shipped"
+           			{
+           			}
+        			}
+        			transitions
+        			{
+    				cancel_order as "Cancel Order"
+    				{
+         				type = normal
+         				from stage = "Order Placed"
+         				to stage = "Order Cancelled"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				close_order as "Close Order"
+    				{
+         				type = normal
+         				from stage = "Order Delivered"
+         				to stage = "Order Closed"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				confirm_delivery as "Confirm Delivery"
+    				{
+         				type = normal
+         				from stage = "Order Shipped"
+         				to stage = "Order Delivered"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				confirm_order as "Confirm Order"
+    				{
+         				type = normal
+         				from stage = "Order Placed"
+         				to stage = "Order Confirmed"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				confirm_replacement_delivery as "Confirm Delivery of Replacement"
+    				{
+         				type = normal
+         				from stage = "Order Replacement Shipped"
+         				to stage = "Order Delivered"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				hold_order as "Place Order On Hold"
+    				{
+         				type = normal
+         				from stage = "Order Processed"
+         				to stage = "Order On Hold"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				initiate_return as "Initiate Return Process"
+    				{
+         				type = normal
+         				from stage = "Order Shipped"
+         				to stage = "Order Returned"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				mark_lost as "Mark Order as Lost"
+    				{
+         				type = normal
+         				from stage = "Order Shipped"
+         				to stage = "Order Lost"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				pending_payment as "Set Order to Pending Payment"
+    				{
+         				type = normal
+         				from stage = "Order Placed"
+         				to stage = "Order Pending Payment"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				process_order as "Process Order"
+    				{
+         				type = normal
+         				from stage = "Order Confirmed"
+         				to stage = "Order Processed"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				process_refund as "Process Refund"
+    				{
+         				type = normal
+         				from stage = "Order Returned"
+         				to stage = "Order Refunded"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				refund_lost_order as "Process Refund for Lost Order"
+    				{
+         				type = normal
+         				from stage = "Order Lost"
+         				to stage = "Order Refunded"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				resume_order as "Resume Order Processing"
+    				{
+         				type = normal
+         				from stage = "Order On Hold"
+         				to stage = "Order Processed"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				ship_order as "Ship Order"
+    				{
+         				type = normal
+         				from stage = "Order Processed"
+         				to stage = "Order Shipped"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				ship_replacement as "Ship Replacement Order"
+    				{
+         				type = normal
+         				from stage = "Order Returned"
+         				to stage = "Order Replacement Shipped"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+        			}
+    			}
+		}
+
+
+	}
+	share_settings
+	{
+			"Read"
+			{
+				name = "Read"
+				type = Users_Permissions
+				permissions = {Chat:true, Predefined:true, ApiAccess:true, PIIAccess:true, ePHIAccess:true}
+				description = "This profile will have read permission for all components\n"
+			}
+			"Write"
+			{
+				name = "Write"
+				type = Users_Permissions
+				permissions = {Chat:true, Predefined:true, ApiAccess:true, PIIAccess:true, ePHIAccess:true}
+				description = "This profile will have write permission for all components\n"
+			}
+			"Administrator"
+			{
+				name = "Administrator"
+				type = Users_Permissions
+				permissions = {Chat:true, Predefined:true, ApiAccess:true, PIIAccess:true, ePHIAccess:true}
+				description = "This profile will have all the permissions.\n"
+			}
+			"Stall Operator"
+			{
+				name = "Stall Operator"
+				type = Users_Permissions
+				permissions = {Chat:false, Predefined:false, ApiAccess:true, PIIAccess:true, ePHIAccess:true}
+				description = "Oversee daily food stall operations \n"
+				ModulePermissions
+				{
+					orders
+					{
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							orders_by_order_status={"View","Edit"}
+							orders_Report={"View","Edit"}
+						}
+					}
+					sales_dashboard
+					{
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							sales_dashboard_Report={"View"}
+						}
+					}
+					order_items
+					{
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							order_items_Report={"View"}
+						}
+					}
+				}
+			}
+			"Developer"
+			{
+				name = "Developer"
+				type = Developer
+				permissions = {Chat:false, Predefined:true, ApiAccess:true, PIIAccess:true, ePHIAccess:true}
+				description = "Developer Profile\n"
+			}
+			"Menu & Pricing Coordinator"
+			{
+				name = "Menu & Pricing Coordinator"
+				type = Users_Permissions
+				permissions = {Chat:false, Predefined:false, ApiAccess:true, PIIAccess:true, ePHIAccess:true}
+				description = "Add, update, or deactivate menu items \n"
+				ModulePermissions
+				{
+					menu_items
+					{
+						enabled= Create,Viewall,Modifyall,Tab 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							menu_items_Report={"View","Edit","Delete"}
+							menu_items_by_category={"View","Edit","Delete"}
+						}
+					}
+				}
+			}
+			"Inventory Supervisor"
+			{
+				name = "Inventory Supervisor"
+				type = Users_Permissions
+				permissions = {Chat:false, Predefined:false, ApiAccess:true, PIIAccess:true, ePHIAccess:true}
+				description = "Track stock levels for all menu items \n"
+				ModulePermissions
+				{
+					inventory
+					{
+						enabled= Viewall,Modifyall 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							inventory_Report={"View","Edit","Delete"}
+						}
+					}
+					orders
+					{
+						enabled= Viewall 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							orders_by_order_status={"View"}
+							orders_Report={"View"}
+						}
+					}
+				}
+			}
+			"Billing Clerk"
+			{
+				name = "Billing Clerk"
+				type = Users_Permissions
+				permissions = {Chat:false, Predefined:false, ApiAccess:true, PIIAccess:true, ePHIAccess:true}
+				description = "Process customer payments via cash or UPI \n"
+				ModulePermissions
+				{
+					orders
+					{
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							orders_by_order_status={"View"}
+							orders_Report={"View"}
+						}
+					}
+					sales_dashboard
+					{
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							sales_dashboard_Report={"View"}
+						}
+					}
+				}
+			}
+			"Mela Event Coordinator"
+			{
+				name = "Mela Event Coordinator"
+				type = Customer_Portal
+				permissions = {Chat:false, Predefined:false, ApiAccess:true, PIIAccess:true, ePHIAccess:true}
+				description = "Monitor overall stall performance across the mela \n"
+				ModulePermissions
+				{
+					menu_items
+					{
+						enabled= Viewall 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							menu_items_Report={"View"}
+							menu_items_by_category={"View"}
+						}
+					}
+					orders
+					{
+						enabled= Viewall 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							orders_by_order_status={"View"}
+							orders_Report={"View"}
+						}
+					}
+					inventory
+					{
+						enabled= Viewall 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							inventory_Report={"View"}
+						}
+					}
+					sales_dashboard
+					{
+						enabled= Viewall 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							sales_dashboard_Report={"View"}
+						}
+					}
+				}
+			}
+			"Customer"
+			{
+				name = "Customer"
+				type = Customer_Portal
+				permissions = {Chat:true, Predefined:true, ApiAccess:true, PIIAccess:true, ePHIAccess:true}
+				description = "This is the default profile having only add and view permission.\n"
+			}
+			roles
+			{
+				"CEO"
+				{
+					description = "User belonging to this role can access data of all other users."
+				}
+			}
+	}
+
+
+	web
+	{
+		forms
+		{
+			form inventory
+			{
+				label placement = left
+			}
+			form menu_items
+			{
+				label placement = left
+			}
+			form order_items
+			{
+				label placement = left
+			}
+			form orders
+			{
+				label placement = left
+			}
+			form sales_dashboard
+			{
+				label placement = left
+			}
+			form user_roles
+			{
+				label placement = left
+			}
+		}
+		reports
+		{
+			report order_items_Report
+			{
+				quickview
+				(
+					layout
+					(
+		 				type = -1
+						datablock1
+						(
+							layout type = -1
+							fields
+							(
+								order as "Order"
+								item_name as "Item Name"
+								quantity as "Quantity"
+								unit_price as "Unit Price"
+								total_price as "Total Price"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    		 				Add 
+    		 				Import 
+    		 				Export 
+    	 				)
+						record
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+    					)
+    				)
+    				action
+    				(
+						on click
+						(
+							View Record   	   
+    					)
+						on right click
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+							View Record   	   
+    					)
+     				)
+				)
+
+				detailview
+				(
+					layout
+					(
+		 				type = 1
+						datablock1
+						(
+							layout type = -2
+		     				title = "Overview"
+							fields
+							(
+								order as "Order"
+								item_name as "Item Name"
+								quantity as "Quantity"
+								unit_price as "Unit Price"
+								total_price as "Total Price"
+							)
+						)
+						datablock2
+						(
+							layout type = -2
+		     				title = "Order"
+		     				related field = order
+							fields
+							(
+								order_id as "Order ID"
+								customer_name as "Customer Name"
+								order_date as "Order Date"
+								total_amount as "Total Amount"
+								discount_percentage as "Discount Percentage"
+								final_amount as "Final Amount"
+								payment_method as "Payment Method"
+								payment_status as "Payment Status"
+								order_status as "Order Status"
+								created_by as "Created By"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    	 				)
+    				)
+				)
+			}
+			report inventory_Report
+			{
+				quickview
+				(
+					layout
+					(
+		 				type = -1
+						datablock1
+						(
+							layout type = -1
+							fields
+							(
+								item_id as "Item ID"
+								reorder_level as "Reorder Level"
+								last_updated as "Last Updated"
+								low_stock_alert as "Low Stock Alert"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    		 				Add 
+    		 				Import 
+    		 				Export 
+    	 				)
+						record
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+    					)
+    				)
+    				action
+    				(
+						on click
+						(
+							View Record   	   
+    					)
+						on right click
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+							View Record   	   
+    					)
+     				)
+				)
+
+				detailview
+				(
+					layout
+					(
+		 				type = 1
+						datablock1
+						(
+							layout type = -2
+		     				title = "Overview"
+							fields
+							(
+								item_id as "Item ID"
+								reorder_level as "Reorder Level"
+								last_updated as "Last Updated"
+								low_stock_alert as "Low Stock Alert"
+							)
+						)
+						datablock2
+						(
+							layout type = -2
+		     				title = "Item ID"
+		     				related field = item_id
+							fields
+							(
+								item_id as "Item ID"
+								item_name as "Item Name"
+								category as "Category"
+								variant as "Variant"
+								price as "Price"
+								is_active as "Is Active"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    	 				)
+    				)
+				)
+			}
+			report menu_items_Report
+			{
+				quickview
+				(
+					layout
+					(
+		 				type = -1
+						datablock1
+						(
+							layout type = -1
+							fields
+							(
+								item_id as "Item ID"
+								item_name as "Item Name"
+								category as "Category"
+								variant as "Variant"
+								price as "Price"
+								is_active as "Is Active"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    		 				Add 
+    		 				Import 
+    		 				Export 
+    	 				)
+						record
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+    					)
+    				)
+    				action
+    				(
+						on click
+						(
+							View Record   	   
+    					)
+						on right click
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+							View Record   	   
+    					)
+     				)
+				)
+
+				detailview
+				(
+					layout
+					(
+		 				type = 1
+						datablock1
+						(
+							layout type = -2
+		     				title = "Overview"
+							fields
+							(
+								item_id as "Item ID"
+								item_name as "Item Name"
+								category as "Category"
+								variant as "Variant"
+								price as "Price"
+								is_active as "Is Active"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    	 				)
+    				)
+				)
+			}
+			report menu_items_by_category
+			{
+				quickview
+				(
+					layout
+					(
+		 				type = 1
+						datablock1
+						(
+							layout type = 1
+							fields
+							(
+								item_name as "Item Name"
+								variant as "Variant"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    		 				Add 
+    		 				Import 
+    		 				Export 
+    	 				)
+						record
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+    					)
+    				)
+    				action
+    				(
+						on click
+						(
+							View Record   	   
+    					)
+						on right click
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+							View Record   	   
+    					)
+     				)
+				)
+
+				detailview
+				(
+					layout
+					(
+		 				type = 1
+						datablock1
+						(
+							layout type = -2
+							fields
+							(
+								item_id as "Item ID"
+								item_name as "Item Name"
+								category as "Category"
+								variant as "Variant"
+								price as "Price"
+								is_active as "Is Active"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    	 				)
+    				)
+				)
+			}
+			report orders_Report
+			{
+				quickview
+				(
+					layout
+					(
+		 				type = -1
+						datablock1
+						(
+							layout type = -1
+							fields
+							(
+								order_id as "Order ID"
+								customer_name as "Customer Name"
+								order_date as "Order Date"
+								total_amount as "Total Amount"
+								discount_percentage as "Discount Percentage"
+								final_amount as "Final Amount"
+								payment_method as "Payment Method"
+								payment_status as "Payment Status"
+								order_status as "Order Status"
+								created_by as "Created By"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    		 				Add 
+    		 				Import 
+    		 				Export 
+    	 				)
+						record
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+    					)
+    				)
+    				action
+    				(
+						on click
+						(
+							View Record   	   
+    					)
+						on right click
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+							View Record   	   
+    					)
+     				)
+				)
+
+				detailview
+				(
+					layout
+					(
+		 				type = 1
+						datablock1
+						(
+							layout type = -2
+		     				title = "Overview"
+							fields
+							(
+								order_id as "Order ID"
+								customer_name as "Customer Name"
+								order_date as "Order Date"
+								total_amount as "Total Amount"
+								discount_percentage as "Discount Percentage"
+								final_amount as "Final Amount"
+								payment_method as "Payment Method"
+								payment_status as "Payment Status"
+								order_status as "Order Status"
+								created_by as "Created By"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    	 				)
+    				)
+				)
+			}
+			report orders_by_order_status
+			{
+				quickview
+				(
+					layout
+					(
+		 				type = 1
+						datablock1
+						(
+							layout type = 1
+							fields
+							(
+								customer_name as "Customer Name"
+								created_by as "Created By"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    		 				Add 
+    		 				Import 
+    		 				Export 
+    	 				)
+						record
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+    					)
+    				)
+    				action
+    				(
+						on click
+						(
+							View Record   	   
+    					)
+						on right click
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+							View Record   	   
+    					)
+     				)
+				)
+
+				detailview
+				(
+					layout
+					(
+		 				type = 1
+						datablock1
+						(
+							layout type = -2
+							fields
+							(
+								order_id as "Order ID"
+								customer_name as "Customer Name"
+								order_date as "Order Date"
+								total_amount as "Total Amount"
+								discount_percentage as "Discount Percentage"
+								final_amount as "Final Amount"
+								payment_method as "Payment Method"
+								payment_status as "Payment Status"
+								order_status as "Order Status"
+								created_by as "Created By"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    	 				)
+    				)
+				)
+			}
+			report sales_dashboard_Report
+			{
+				quickview
+				(
+					layout
+					(
+		 				type = -1
+						datablock1
+						(
+							layout type = -1
+							fields
+							(
+								date_1 as "Date"
+								total_revenue as "Total Revenue"
+								top_selling_item as "Top Selling Item"
+								cash_payment as "Cash Payment"
+								upi_payment as "UPi Payment"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    		 				Add 
+    		 				Import 
+    		 				Export 
+    	 				)
+						record
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+    					)
+    				)
+    				action
+    				(
+						on click
+						(
+							View Record   	   
+    					)
+						on right click
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+							View Record   	   
+    					)
+     				)
+				)
+
+				detailview
+				(
+					layout
+					(
+		 				type = 1
+						datablock1
+						(
+							layout type = -2
+		     				title = "Overview"
+							fields
+							(
+								date_1 as "Date"
+								total_revenue as "Total Revenue"
+								top_selling_item as "Top Selling Item"
+								cash_payment as "Cash Payment"
+								upi_payment as "UPi Payment"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    	 				)
+    				)
+				)
+			}
+			report user_roles_Report
+			{
+				quickview
+				(
+					layout
+					(
+		 				type = -1
+						datablock1
+						(
+							layout type = -1
+							fields
+							(
+								username as "Username"
+								role as "Role"
+								access_level as "Access Level"
+								last_login as "Last Login"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    		 				Add 
+    		 				Import 
+    		 				Export 
+    	 				)
+						record
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+    					)
+    				)
+    				action
+    				(
+						on click
+						(
+							View Record   	   
+    					)
+						on right click
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+							View Record   	   
+    					)
+     				)
+				)
+
+				detailview
+				(
+					layout
+					(
+		 				type = 1
+						datablock1
+						(
+							layout type = -2
+		     				title = "Overview"
+							fields
+							(
+								username as "Username"
+								role as "Role"
+								access_level as "Access Level"
+								last_login as "Last Login"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    	 				)
+    				)
+				)
+			}
+		}
+		menu
+		{
+			space Space
+			{
+				displayname = "Space"
+				icon = "objects-spaceship"
+
+				section Section_1
+				{
+					displayname = "Dashboard"
+					icon = "ui-1-dashboard-half"
+					page DashBoard
+					{
+						icon = "ui-1-dashboard-half"
+					}
+				}
+				section Section_2
+				{
+					displayname = "Order Items"
+					icon = "shopping-cart-simple"
+					form  order_items
+					{
+						icon = "ui-1-bold-add"
+					}
+					report order_items_Report
+					{
+						icon = "travel-world"
+					}
+				}
+				section Section_3
+				{
+					displayname = "Inventories"
+					icon = "shopping-stock"
+					form  inventory
+					{
+						icon = "ui-1-bold-add"
+					}
+					report inventory_Report
+					{
+						icon = "media-1-volume-up"
+					}
+				}
+				section Section_4
+				{
+					displayname = "Menu Items"
+					icon = "food-microwave"
+					form  menu_items
+					{
+						icon = "ui-1-bold-add"
+					}
+					report menu_items_Report
+					{
+						icon = "design-2-selection"
+					}
+					report menu_items_by_category
+					{
+						icon = "design-2-selection"
+					}
+				}
+				section Section_5
+				{
+					displayname = "Orders"
+					icon = "shopping-list"
+					form  orders
+					{
+						icon = "ui-1-bold-add"
+					}
+					report orders_Report
+					{
+						icon = "travel-world"
+					}
+					report orders_by_order_status
+					{
+						icon = "shopping-basket-edit"
+					}
+				}
+				section Section_6
+				{
+					displayname = "Sales Dashboard"
+					icon = "business-businessman-03"
+					form  sales_dashboard
+					{
+						icon = "ui-1-bold-add"
+					}
+					report sales_dashboard_Report
+					{
+						icon = "business-laptop-71"
+					}
+				}
+				section Section_7
+				{
+					displayname = "User Roles"
+					icon = "users-2-woman"
+					form  user_roles
+					{
+						icon = "ui-1-bold-add"
+					}
+					report user_roles_Report
+					{
+						icon = "travel-world"
+					}
+				}
+				section ZC_App_Preferences
+				{
+					displayname = "App Preferences"
+					icon = "design-app"
+					systemcomponent
+					{
+						type = localization
+						displayname = "Language Selection"
+						icon = "education-language"
+					}
+					systemcomponent
+					{
+						type = connection
+						displayname = "Integrations"
+						icon = "tech-2-connection"
+					}
+				}
+				section ZC_Approvals
+				{
+					displayname = "Approvals"
+					icon = "ui-2-hourglass"
+					systemcomponent
+					{
+						type = approval
+						approval status = pending
+						displayname = "Pending Tasks"
+						icon = "ui-2-hourglass"
+					}
+					systemcomponent
+					{
+						type = approval
+						approval status = completed
+						displayname = "Completed Tasks"
+						icon = "design-todo"
+					}
+				}
+				section SharedAnalytics_Section
+				{
+					type = shared_user_report_section
+					displayname = "Reports"
+					icon = "business-chart-bar-33"
+				}
+			}
+			preference
+			{
+				icon
+				{
+					style = solid
+					show = {space,section,component}
+				}
+			}
+		}
+		customize
+		{
+			new theme = 11
+			font = "poppins"
+			color options
+			{
+				color = "1"
+			}
+			logo
+			{
+				preference = "none"
+				placement = "left"
+			}
+		}
+	}
+	phone
+	{
+		forms
+		{
+			form inventory
+			{
+				label placement = auto
+			}
+			form menu_items
+			{
+				label placement = auto
+			}
+			form order_items
+			{
+				label placement = auto
+			}
+			form orders
+			{
+				label placement = auto
+			}
+			form sales_dashboard
+			{
+				label placement = auto
+			}
+			form user_roles
+			{
+				label placement = auto
+			}
+		}
+		customize
+		{
+			layout = slidingpane
+			font = "default"
+			style = "1"
+			color options
+			{
+				color = darkgrey
+			}
+			logo
+			{
+				preference = "none"
+			}
+		}
+	}
+	tablet
+	{
+		forms
+		{
+			form inventory
+			{
+				label placement = auto
+			}
+			form menu_items
+			{
+				label placement = auto
+			}
+			form order_items
+			{
+				label placement = auto
+			}
+			form orders
+			{
+				label placement = auto
+			}
+			form sales_dashboard
+			{
+				label placement = auto
+			}
+			form user_roles
+			{
+				label placement = auto
+			}
+		}
+		customize
+		{
+			layout = slidingpane
+			font = "default"
+			style = "1"
+			color options
+			{
+				color = darkgrey
+			}
+			logo
+			{
+				preference = "none"
+			}
+		}
+	}
+	translation
+{
+{"Language_Settings":{"LANGAGUE_WITH_LOGIN":"browser"}}
+}
+}
